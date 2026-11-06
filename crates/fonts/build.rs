@@ -80,11 +80,18 @@ fn manifest(dir: &std::path::Path, manifest: &std::path::Path, wasm: bool, stric
         let [family, style, file, scripts, ..] = f.as_slice() else {
             return Err(format!("malformed manifest line: {line}"));
         };
+        // Use the bundled, metric-normalized Droid Sans Fallback as the Hans face. The
+        // manifest keeps the "LXGW WenKai Lite" family name so the UI stack order and the
+        // document Chinese face stay the same; only the bytes change.
+        let bundled_droid = (*family == "LXGW WenKai Lite" && *style == "Regular").then(|| {
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../assets/fonts/droid_norm.ttf")
+        });
+        let face = bundled_droid.as_deref().unwrap_or_else(|| std::path::Path::new(*file));
         // Keep the upstream general CJK size cap. The separately pinned native Chinese UI
         // face has its own bound; web builds retain the smaller general limit. A required
         // Chinese face over its cap fails the build instead of being silently omitted.
         let cjk = scripts.split(',').any(cjk_scripts::is_cjk_script);
-        if cjk && let Ok(metadata) = std::fs::metadata(dir.join(file)) {
+        if cjk && let Ok(metadata) = std::fs::metadata(dir.join(face)) {
             match cjk_scripts::cjk_size_decision(family, metadata.len(), wasm, strict_cap) {
                 cjk_scripts::CjkSizeDecision::Embed => {}
                 cjk_scripts::CjkSizeDecision::Skip => continue,
@@ -114,7 +121,7 @@ fn manifest(dir: &std::path::Path, manifest: &std::path::Path, wasm: bool, stric
             continue;
         }
         has_hans |= cjk_scripts::has_script_tag(scripts, "Hans");
-        let path = dir.join(file).canonicalize().map_err(|e| format!("{file}: {e}"))?;
+        let path = dir.join(face).canonicalize().map_err(|e| format!("{file}: {e}"))?;
         println!("cargo::rerun-if-changed={}", path.display());
         let scripts: Vec<String> = scripts.split(',').map(|s| format!("{:?}", s.trim())).collect();
         let _ = writeln!(
