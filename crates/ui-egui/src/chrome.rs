@@ -480,7 +480,7 @@ fn tab(ui: &mut egui::Ui, spec: TabSpec<'_>, close: &mut Option<usize>) -> egui:
 pub fn mode_bar(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
     let t = Tokens::get(ui.ctx());
     egui::Panel::top("mode_bar")
-        .exact_size(48.0)
+        .exact_size(44.0)
         .frame(egui::Frame::NONE.fill(t.chrome).inner_margin(egui::Margin::symmetric(10, 0)).stroke(Stroke::new(1.0, t.divider)))
         .show(ui, |ui| {
             ui.horizontal_centered(|ui| {
@@ -488,7 +488,7 @@ pub fn mode_bar(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 // The menus, unless the native macOS menu bar has them: collapsed into a single
                 // "Menu" button that opens them as a popup.
                 if app.native_menu.is_none() {
-                    let btn = widgets::ghost_button_sized(ui, "panel-left", tl!("Menu"), 48.0);
+                    let btn = widgets::ghost_button_sized(ui, "panel-left", tl!("Menu"), 44.0);
                     ui.ctx().accesskit_node_builder(btn.id, |n| {
                         n.set_role(egui::accesskit::Role::Button);
                         n.set_label(tl!("Menu"));
