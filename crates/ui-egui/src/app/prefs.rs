@@ -89,6 +89,7 @@ impl PdfCraftApp {
             "pinned_folders": self.pinned.folders,
             "theme": self.theme_preference,
             "scroll_speed": self.scroll_speed,
+            "touchpad_scroll_speed": self.touchpad_speed,
             "invert_middle_drag": self.invert_middle_drag,
             "animation_effects": self.animation_effects,
             "default_mode": self.default_mode,
@@ -240,6 +241,9 @@ impl PdfCraftApp {
         }
         if let Ok(speed) = serde_json::from_value::<scroll_speed::ScrollSpeed>(v["scroll_speed"].clone()) {
             self.scroll_speed = speed;
+        }
+        if let Ok(speed) = serde_json::from_value::<scroll_speed::ScrollSpeed>(v["touchpad_scroll_speed"].clone()) {
+            self.touchpad_speed = speed;
         }
         if let Some(invert) = v["invert_middle_drag"].as_bool() {
             self.invert_middle_drag = invert;

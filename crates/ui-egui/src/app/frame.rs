@@ -84,6 +84,7 @@ impl PdfCraftApp {
         }
         // Before egui reads this frame's wheel input.
         self.scroll_speed.apply(ctx, raw);
+        self.touchpad_speed.apply_touchpad(raw);
         // The native menu's key equivalents.
         if let Some(native) = self.native_menu.as_mut() {
             native.raw_input(raw);

@@ -312,6 +312,8 @@ pub struct PdfCraftApp {
     desktop_theme_enabled: bool,
     /// How far a mouse-wheel notch scrolls.
     pub scroll_speed: scroll_speed::ScrollSpeed,
+    /// How far a touchpad swipe the system reports in points (Wayland, macOS) scrolls.
+    pub touchpad_speed: scroll_speed::ScrollSpeed,
     /// Preferences ▸ Invert middle-button drag: the middle button's pan or auto-scroll moves the
     /// view the other way. Off by default.
     pub invert_middle_drag: bool,

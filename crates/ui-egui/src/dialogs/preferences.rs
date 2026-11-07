@@ -775,6 +775,26 @@ fn scrolling(ui: &mut egui::Ui, app: &mut PdfCraftApp, t: &Tokens, ctx: &mut Pre
             ],
         );
     });
+    #[cfg(not(any(target_os = "windows", target_arch = "wasm32")))]
+    {
+        ui.horizontal(|ui| {
+            ctx.label_primary(ui, tl!("Scroll speed (touchpad)"), t);
+            ctx.pill_choice(
+                ui,
+                t,
+                &mut app.touchpad_speed,
+                &[
+                    (ScrollSpeed::Slow, tl_ctx!("scroll speed", ScrollSpeed::Slow.label())),
+                    (ScrollSpeed::Normal, tl_ctx!("scroll speed", ScrollSpeed::Normal.label())),
+                    (ScrollSpeed::Fast, tl_ctx!("scroll speed", ScrollSpeed::Fast.label())),
+                ],
+            );
+        });
+        #[cfg(not(target_os = "macos"))]
+        {
+            ctx.label_secondary(ui, tl!("On X11, the touchpad follows the mouse wheel speed."), t);
+        }
+    }
     ui.add_space(6.0);
     ctx.checkbox(ui, &mut app.invert_middle_drag, tl!("Invert middle-button drag"), t);
     ctx.label_secondary(ui, tl!("Panning or auto-scrolling with the middle (wheel) button moves the page the other way."), t);

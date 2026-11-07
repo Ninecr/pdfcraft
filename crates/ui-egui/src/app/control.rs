@@ -50,6 +50,9 @@ impl PdfCraftApp {
             ("scroll_speed", _) => {
                 self.scroll_speed = scroll_speed::ScrollSpeed::parse(value).ok_or("scroll_speed must be slow, normal, or fast")?;
             }
+            ("touchpad_scroll_speed", _) => {
+                self.touchpad_speed = scroll_speed::ScrollSpeed::parse(value).ok_or("touchpad_scroll_speed must be slow, normal, or fast")?;
+            }
             ("invert_middle_drag", _) => {
                 self.invert_middle_drag = value.parse::<bool>().map_err(|_| "invert_middle_drag must be true or false")?;
             }
